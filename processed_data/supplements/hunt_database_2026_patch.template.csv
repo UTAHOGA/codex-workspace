@@ -1,0 +1,3 @@
+hunt_code,residency,field,value,force_overwrite
+EXAMPLE-HUNT-CODE,resident,permit_count,25,false
+EXAMPLE-HUNT-CODE,nonresident,permit_count,5,false
