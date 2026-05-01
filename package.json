@@ -1,0 +1,23 @@
+{
+  "name": "codex-workspace",
+  "version": "1.0.0",
+  "description": "",
+  "main": "apply-2026-supplements.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "apply:2026:supplements": "node apply-2026-supplements.js",
+    "audit:2026": "node audit-2026-completeness.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/UTAHOGA/codex-workspace.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/UTAHOGA/codex-workspace/issues"
+  },
+  "homepage": "https://github.com/UTAHOGA/codex-workspace#readme"
+}
