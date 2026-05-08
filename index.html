@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="U.O.G.A. Hunt Builder helps hunters compare Utah hunt opportunities, save hunts, review land status, and connect with verified outfitters."
+    />
+    <title>U.O.G.A. Hunt Builder</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="#hunt-builder" aria-label="U.O.G.A. Hunt Builder home">
+        <span class="brand-mark">U</span>
+        <span>
+          <strong>U.O.G.A.</strong>
+          <small>Hunt Builder</small>
+        </span>
+      </a>
+      <nav class="primary-nav" aria-label="Primary navigation">
+        <a href="#hunt-builder">Hunt Builder</a>
+        <a href="#research">Hunt Research</a>
+        <a href="#outfitters">Outfitters</a>
+        <a href="#hard-copies">Hard Copies</a>
+      </nav>
+      <button class="mobile-panel-toggle" type="button" aria-controls="builder-panel" aria-expanded="false">
+        Filters
+      </button>
+    </header>
+
+    <main id="hunt-builder" class="builder-shell">
+      <aside id="builder-panel" class="builder-panel" aria-label="Hunt filters and saved hunts">
+        <section class="panel-card hero-card">
+          <p class="eyebrow">Plan your Utah hunt like the pros do</p>
+          <h1>Hunt Builder</h1>
+          <p>
+            Filter hunts, click a unit, save options to your backpack, and compare opportunities before contacting an outfitter.
+          </p>
+          <div class="mode-switch" aria-label="Map source selector">
+            <button class="active" type="button" data-map-source="dwr">DWR Map</button>
+            <button type="button" data-map-source="earth">Google Earth</button>
+            <button type="button" data-map-source="maps">Google Maps</button>
+          </div>
+        </section>
+
+        <section class="panel-card" aria-labelledby="filters-heading">
+          <div class="section-header">
+            <div>
+              <p class="eyebrow">Build your hunt</p>
+              <h2 id="filters-heading">Filters</h2>
+            </div>
+            <button id="reset-filters" class="ghost-button" type="button">Reset filters</button>
+          </div>
+
+          <label class="field-label" for="hunt-search">Fast hunt-number search</label>
+          <input id="hunt-search" type="search" inputmode="search" placeholder="Try DB1001, elk, Wasatch, rifle" autocomplete="off" />
+
+          <div class="filter-grid">
+            <label>
+              <span>Species</span>
+              <select id="species-filter" data-filter="species"></select>
+            </label>
+            <label>
+              <span>Sex</span>
+              <select id="sex-filter" data-filter="sex"></select>
+            </label>
+            <label>
+              <span>Hunt Type</span>
+              <select id="type-filter" data-filter="huntType"></select>
+            </label>
+            <label>
+              <span>Hunt Class</span>
+              <select id="class-filter" data-filter="huntClass"></select>
+            </label>
+            <label>
+              <span>Weapon</span>
+              <select id="weapon-filter" data-filter="weapon"></select>
+            </label>
+            <label>
+              <span>DWR Hunt Units</span>
+              <select id="unit-filter" data-filter="unitId"></select>
+            </label>
+          </div>
+
+          <p id="filter-summary" class="status-line" role="status">Loading hunts…</p>
+        </section>
+
+        <section class="panel-card" aria-labelledby="backpack-heading">
+          <div class="section-header">
+            <div>
+              <p class="eyebrow">Hunt Backpack</p>
+              <h2 id="backpack-heading">Saved Hunts <span id="saved-count" class="count-badge">0</span></h2>
+            </div>
+            <button id="clear-backpack" class="ghost-button" type="button">Clear</button>
+          </div>
+          <div id="saved-hunts" class="saved-list" aria-live="polite"></div>
+          <div id="comparison" class="comparison" hidden></div>
+        </section>
+
+        <section class="panel-card warning-card">
+          <h2>Access warning</h2>
+          <p>
+            Public/private land layers are planning aids only. Verify current rules, written permission requirements,
+            closures, and hunt boundaries with official Utah DWR sources before hunting.
+          </p>
+        </section>
+      </aside>
+
+      <section class="map-stage" aria-label="Interactive hunt map and results">
+        <div class="toolbar" role="region" aria-label="Map and result tools">
+          <div class="view-tabs" role="group" aria-label="Available hunts view">
+            <button id="map-view" class="active" type="button" aria-pressed="true">Map view</button>
+            <button id="table-view" type="button" aria-pressed="false">Table view</button>
+          </div>
+          <div class="basemap-tabs" role="group" aria-label="Basemap choices">
+            <button class="active" type="button" data-basemap="road">Road</button>
+            <button type="button" data-basemap="terrain">Terrain</button>
+            <button type="button" data-basemap="satellite">Satellite</button>
+            <button type="button" data-basemap="labeled">Labeled satellite</button>
+          </div>
+        </div>
+
+        <div id="map-canvas" class="map-canvas road" tabindex="0" aria-label="Mock Utah hunt unit map. Click a boundary to load matching hunts.">
+          <svg viewBox="0 0 860 720" aria-hidden="true">
+            <defs>
+              <pattern id="contours" width="70" height="70" patternUnits="userSpaceOnUse">
+                <path d="M0 35 C22 15 48 58 70 34" fill="none" stroke="rgba(30,55,32,.18)" stroke-width="2" />
+              </pattern>
+            </defs>
+            <rect width="860" height="720" class="map-bg" />
+            <rect width="860" height="720" fill="url(#contours)" class="contour-fill" />
+            <path class="utah-outline" d="M252 48 H620 V655 H224 V515 H156 V286 H252 Z" />
+            <path class="route" d="M274 80 C350 150 330 250 405 335 C500 445 530 545 586 645" />
+            <g id="ownership-overlays"></g>
+            <g id="unit-boundaries"></g>
+          </svg>
+          <div id="map-status" class="map-status">Click a boundary to load hunts.</div>
+          <div class="map-empty" id="map-empty" hidden>No matching unit boundaries for the current filters.</div>
+        </div>
+
+        <aside class="legend-panel" aria-label="Land ownership legend">
+          <div class="section-header compact">
+            <h2>Land ownership</h2>
+          </div>
+          <label><input type="checkbox" data-layer="usfs" checked /> <i class="swatch usfs"></i> USFS</label>
+          <label><input type="checkbox" data-layer="blm" checked /> <i class="swatch blm"></i> BLM</label>
+          <label><input type="checkbox" data-layer="sitla" checked /> <i class="swatch sitla"></i> SITLA</label>
+          <label><input type="checkbox" data-layer="dwr" checked /> <i class="swatch dwr"></i> DWR / WMA</label>
+          <label><input type="checkbox" data-layer="private" checked /> <i class="swatch private"></i> Private</label>
+          <label><input type="checkbox" data-layer="cwmu" checked /> <i class="swatch cwmu"></i> CWMU</label>
+        </aside>
+
+        <section id="available-panel" class="results-panel" aria-labelledby="available-heading">
+          <div class="section-header">
+            <div>
+              <p class="eyebrow">Available hunts</p>
+              <h2 id="available-heading">Matching opportunities</h2>
+            </div>
+            <span id="result-count" class="count-badge">0</span>
+          </div>
+          <div id="loading-state" class="loading-state">Preparing hunt data…</div>
+          <div id="empty-state" class="empty-state" hidden>No hunts match those filters. Try resetting filters or selecting a different unit.</div>
+          <div id="hunt-results" class="hunt-results" aria-live="polite"></div>
+        </section>
+      </section>
+
+      <aside class="detail-rail" aria-label="Hunt analysis and outfitter matching">
+        <section class="panel-card" aria-labelledby="analysis-heading">
+          <p class="eyebrow">Hunt Analysis</p>
+          <h2 id="analysis-heading">Selected Hunt</h2>
+          <div id="hunt-analysis" class="analysis-card">Select a hunt to see unit notes, access cautions, and outfitter matches.</div>
+        </section>
+
+        <section id="outfitters" class="panel-card" aria-labelledby="outfitter-heading">
+          <p class="eyebrow">U.O.G.A. Verified Outfitters</p>
+          <h2 id="outfitter-heading">Outfitter matching</h2>
+          <div id="outfitter-results">Select a hunt to load outfitters.</div>
+        </section>
+
+        <section class="panel-card official-card" aria-labelledby="official-heading">
+          <div class="section-header">
+            <div>
+              <p class="eyebrow">Official Utah DWR hunt details</p>
+              <h2 id="official-heading">Selected Hunt Details</h2>
+            </div>
+            <a id="official-link" class="ghost-button" href="https://wildlife.utah.gov/hunting/main-hunting-page.html" target="_blank" rel="noreferrer">Open DWR</a>
+          </div>
+          <div id="official-status" class="status-line">Select a hunt to prepare an official-source fallback link.</div>
+          <iframe id="official-frame" title="Official Utah DWR hunt details" loading="lazy" hidden></iframe>
+        </section>
+      </aside>
+    </main>
+
+    <section id="research" class="support-section">
+      <h2>Hunt Research</h2>
+      <p>Use saved hunts as a shortlist for regulation review, scouting, and outfitter conversations.</p>
+    </section>
+    <section id="hard-copies" class="support-section">
+      <h2>Hard Copies</h2>
+      <p>Future upgrade: printable hunt plans, map notes, and packing checklists.</p>
+    </section>
+
+    <script src="app.js"></script>
+  </body>
+</html>
