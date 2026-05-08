@@ -20,6 +20,7 @@
         </span>
       </a>
       <nav class="primary-nav" aria-label="Primary navigation">
+        <a href="https://www.uoga.org/">Main U.O.G.A.</a>
         <a href="#hunt-builder">Hunt Builder</a>
         <a href="#research">Hunt Research</a>
         <a href="#outfitters">Outfitters</a>
@@ -33,11 +34,12 @@
     <main id="hunt-builder" class="builder-shell">
       <aside id="builder-panel" class="builder-panel" aria-label="Hunt filters and saved hunts">
         <section class="panel-card hero-card">
-          <p class="eyebrow">Plan your Utah hunt like the pros do</p>
+          <p class="eyebrow">Supplement to the main U.O.G.A. website</p>
           <h1>Hunt Builder</h1>
           <p>
-            Filter hunts, click a unit, save options to your backpack, and compare opportunities before contacting an outfitter.
+            A planning companion for serious hunters: filter hunts, click a unit, save options to your backpack, and compare opportunities before contacting a U.O.G.A. outfitter.
           </p>
+          <a class="main-site-link" href="https://www.uoga.org/">Return to U.O.G.A. main site</a>
           <div class="mode-switch" aria-label="Map source selector">
             <button class="active" type="button" data-map-source="dwr">DWR Map</button>
             <button type="button" data-map-source="earth">Google Earth</button>
@@ -134,13 +136,14 @@
             <path class="utah-outline" d="M252 48 H620 V655 H224 V515 H156 V286 H252 Z" />
             <path class="route" d="M274 80 C350 150 330 250 405 335 C500 445 530 545 586 645" />
             <g id="ownership-overlays"></g>
+            <g id="planning-overlays"></g>
             <g id="unit-boundaries"></g>
           </svg>
           <div id="map-status" class="map-status">Click a boundary to load hunts.</div>
           <div class="map-empty" id="map-empty" hidden>No matching unit boundaries for the current filters.</div>
         </div>
 
-        <aside class="legend-panel" aria-label="Land ownership legend">
+        <aside class="legend-panel" aria-label="Map layer controls">
           <div class="section-header compact">
             <h2>Land ownership</h2>
           </div>
@@ -150,6 +153,19 @@
           <label><input type="checkbox" data-layer="dwr" checked /> <i class="swatch dwr"></i> DWR / WMA</label>
           <label><input type="checkbox" data-layer="private" checked /> <i class="swatch private"></i> Private</label>
           <label><input type="checkbox" data-layer="cwmu" checked /> <i class="swatch cwmu"></i> CWMU</label>
+
+          <div class="layer-divider"></div>
+          <div class="section-header compact">
+            <h2>Planning layers</h2>
+          </div>
+          <label><input type="checkbox" data-layer="wma" checked /> <i class="swatch wma"></i> Wildlife management</label>
+          <label><input type="checkbox" data-layer="walkIn" /> <i class="swatch walkIn"></i> Walk-in access</label>
+          <label><input type="checkbox" data-layer="habitat" checked /> <i class="swatch habitat"></i> Species habitat</label>
+          <label><input type="checkbox" data-layer="medical" /> <i class="swatch medical"></i> Medical facilities</label>
+          <label><input type="checkbox" data-layer="restricted" /> <i class="swatch restricted"></i> Restricted areas</label>
+          <label><input type="checkbox" data-layer="prescribed" /> <i class="swatch prescribed"></i> Prescribed burns</label>
+          <label><input type="checkbox" data-layer="cwd" /> <i class="swatch cwd"></i> CWD detected</label>
+          <label><input type="checkbox" data-layer="counties" checked /> <i class="swatch counties"></i> Counties</label>
         </aside>
 
         <section id="available-panel" class="results-panel" aria-labelledby="available-heading">
@@ -195,7 +211,7 @@
 
     <section id="research" class="support-section">
       <h2>Hunt Research</h2>
-      <p>Use saved hunts as a shortlist for regulation review, scouting, and outfitter conversations.</p>
+      <p>Use saved hunts as a shortlist for regulation review, scouting, and outfitter conversations. This supplement should point hunters back to the main U.O.G.A. site for association information, membership context, standards, ethics, and verified outfitter resources.</p>
     </section>
     <section id="hard-copies" class="support-section">
       <h2>Hard Copies</h2>
