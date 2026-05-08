@@ -137,7 +137,22 @@ const state = {
   tableView: false,
   basemap: 'road',
   mapSource: 'dwr',
-  layerVisibility: { usfs: true, blm: true, sitla: true, dwr: true, private: true, cwmu: true },
+  layerVisibility: {
+    usfs: true,
+    blm: true,
+    sitla: true,
+    dwr: true,
+    private: true,
+    cwmu: true,
+    wma: true,
+    walkIn: false,
+    habitat: true,
+    medical: false,
+    restricted: false,
+    prescribed: false,
+    cwd: false,
+    counties: true,
+  },
 };
 
 const els = {
@@ -150,6 +165,7 @@ const els = {
   filterSummary: document.querySelector('#filter-summary'),
   unitBoundaries: document.querySelector('#unit-boundaries'),
   ownershipOverlays: document.querySelector('#ownership-overlays'),
+  planningOverlays: document.querySelector('#planning-overlays'),
   mapCanvas: document.querySelector('#map-canvas'),
   mapStatus: document.querySelector('#map-status'),
   mapEmpty: document.querySelector('#map-empty'),
@@ -254,6 +270,8 @@ function renderMap() {
     return `<circle class="ownership-bubble ${key}${visible ? '' : ' hidden-layer'}" cx="${270 + index * 48}" cy="${145 + huntUnits.indexOf(unit) * 115}" r="${Math.max(8, percent / 2.5)}"><title>${unit.name}: ${key.toUpperCase()} ${percent}%</title></circle>`;
   }).join('')).join('');
 
+  els.planningOverlays.innerHTML = renderPlanningLayers();
+
   els.mapEmpty.hidden = visibleUnitIds.size > 0;
   els.mapCanvas.className = `map-canvas ${state.basemap}`;
 
@@ -266,6 +284,24 @@ function renderMap() {
       }
     });
   });
+}
+
+function renderPlanningLayers() {
+  const layers = [
+    { key: 'counties', shape: '<path class="planning-layer counties" d="M215 82 H610 V640 H218 M405 82 V640 M215 362 H610" />' },
+    { key: 'wma', shape: '<path class="planning-layer wma" d="M308 138 C372 116 432 145 452 206 C410 260 336 255 296 202 Z" />' },
+    { key: 'walkIn', shape: '<path class="planning-layer walkIn" d="M520 120 C590 105 648 145 660 205 C602 244 540 230 500 176 Z" />' },
+    { key: 'habitat', shape: '<path class="planning-layer habitat" d="M360 356 C445 314 562 350 606 442 C536 520 408 512 342 430 Z" />' },
+    { key: 'restricted', shape: '<path class="planning-layer restricted" d="M250 470 L370 430 L430 540 L292 592 Z" />' },
+    { key: 'prescribed', shape: '<path class="planning-layer prescribed" d="M548 470 C622 448 690 500 690 585 C618 628 542 595 520 532 Z" />' },
+    { key: 'cwd', shape: '<circle class="planning-layer cwd" cx="492" cy="310" r="42" />' },
+    { key: 'medical', shape: '<g class="planning-layer medical"><circle cx="650" cy="345" r="21" /><path d="M650 332 V358 M637 345 H663" /></g>' },
+  ];
+
+  return layers
+    .filter((layer) => state.layerVisibility[layer.key])
+    .map((layer) => layer.shape)
+    .join('');
 }
 
 function renderResults() {
